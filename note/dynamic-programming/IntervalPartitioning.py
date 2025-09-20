@@ -25,4 +25,3 @@ def intervalPartitioning():
 
     # dpの最後の要素が配列の終端での最小コストとなる
     print(dp[N])
-
