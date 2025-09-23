@@ -105,3 +105,25 @@ def unboundedSubsetSum(arr, W):
                 dp[w] = True
 
     return dp[W]
+
+
+def boundedSubsetSum(arr, limits, W):
+    n = len(arr)
+    # dp[i][w] = i番目までのアイテムを使って和wが作れるかどうか
+    dp = [[False] * (W + 1) for _ in range(n + 1)]
+    dp[0][0] = True  # 何も使わずに和0は作れる
+
+    for i in range(1, n + 1):
+        for w in range(W + 1):
+            # i番目のアイテムを使わない場合
+            dp[i][w] = dp[i - 1][w]
+
+            # i番目のアイテムを1回以上使う場合
+            for k in range(1, limits[i - 1] + 1):
+                if (
+                    w >= k * arr[i - 1] and dp[i - 1][w - k * arr[i - 1]]
+                ):  # アイテムiをk回使ってもw以下である（iをk回使える）かつiをk回使った場合のdpデーブル参照がTrueの場合
+                    dp[i][w] = True
+                    break  # kループは１つTrueならTrueのため切り上げ可能
+
+    return dp[n][W]
