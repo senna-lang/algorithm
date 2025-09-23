@@ -89,3 +89,19 @@ def subsetSum3(arr, k, W):
         if dp[n][j][W]:
             return True
     return False
+
+
+def unboundedSubsetSum(arr, W):
+    n = len(arr)
+    # dp[w] = 和wが作れるかどうか
+    dp = [False] * (W + 1)
+    dp[0] = True
+
+    # 各アイテムについて
+    for i in range(n):
+        # そのアイテムを使って更新可能な全ての和を更新
+        for w in range(arr[i], W + 1):
+            if dp[w - arr[i]]:
+                dp[w] = True
+
+    return dp[W]
