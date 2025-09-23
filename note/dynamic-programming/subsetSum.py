@@ -127,3 +127,21 @@ def boundedSubsetSum(arr, limits, W):
                     break  # kループは１つTrueならTrueのため切り上げ可能
 
     return dp[n][W]
+
+
+def lcs(S, T):
+    m, n = len(S), len(T)
+
+    # dp[i][j] = S[0:i]とT[0:j]のLCSの長さ
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if S[i - 1] == T[j - 1]:
+                # 文字が一致する場合
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                # 文字が一致しない場合
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    return dp[m][n]
