@@ -145,3 +145,43 @@ def lcs(S, T):
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
 
     return dp[m][n]
+
+
+def maxAverageSum(arr, M):
+    N = len(arr)
+
+    # 累積和を事前計算（区間和を高速に求めるため）
+    prefix_sum = [0] * (N + 1)
+    for i in range(N):
+        prefix_sum[i + 1] = prefix_sum[i] + arr[i]
+
+    def range_sum(i, j):
+        """区間[i, j)の和を返す"""
+        return prefix_sum[j] - prefix_sum[i]
+
+    def range_avg(i, j):
+        """区間[i, j)の平均を返す"""
+        return range_sum(i, j) / (j - i)
+
+    # dp[i][m] = 最初のi個の要素をm個の区間に分けた時の平均値の総和の最大値
+    # 初期値は負の無限大（実現不可能を表す）
+    dp = [[-float("inf")] * (M + 1) for _ in range(N + 1)]
+
+    # 初期条件：0個の要素を0個の区間に分ける場合の和は0
+    dp[0][0] = 0
+
+    for i in range(1, N + 1):
+        # 最初のi個の要素を最大M区間で何区間まで分割できるか
+        for m in range(1, min(i, M) + 1):
+            # 最後の区間の開始位置をjとする
+            # m-1 → iまでの区間を位置jで分割する
+            # m-1とすることでj以前の区間を確保する（j以前の区間はm-1個の区間で分けられるためjが最後の区間となる）
+            for j in range(m - 1, i):
+                # jより前の要素をm-1の区間で分けたときのコストが計算されていれば現在のdpを更新可能
+                if dp[j][m - 1] != -float("inf"):
+                    # 区間[j, i)を最後の区間とする
+                    avg = range_avg(j, i)
+                    # jより前の要素をm-1個の区間に分けたときの計算済みの最大値にj-i区間の平均値を足す
+                    dp[i][m] = max(dp[i][m], dp[j][m - 1] + avg)
+
+    return dp[N][M]
