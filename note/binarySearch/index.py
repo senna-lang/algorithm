@@ -71,3 +71,47 @@ def bisectBinarySearch():
                 min_value = a[i] + val
 
     print(min_value)
+
+
+def shootingKing():
+    # 入力
+    N = int(input())
+    h = []  # 各風船の初期高度
+    s = []  # 各風船の膨張速度
+    for i in range(N):
+        hi, si = map(int, input().split())
+        h.append(hi)
+        s.append(si)
+
+    # 二分探索
+    left = 0
+    right = INF
+    while right - left > 1:
+        mid = (left + right) // 2  # midは高度として扱う
+
+        # 判定
+        ok = True
+        t = [0] * N  # 各風船を割るまでの時間制限
+        for i in range(N):
+            # そもそも mid が初期高度より低かったら false
+            if mid < h[i]:
+                ok = False
+            else:
+                # 風船iは時刻tに高度h[i] + s[i] * tになる
+                # 高度midに達する時刻は：h[i] + s[i] * t = mid
+                # 解くと：t = (mid - h[i]) / s[i]
+                # つまり、時刻t[i]までに風船iを割らないと手遅れになる
+                t[i] = (mid - h[i]) // s[i]
+
+        # 時間制限がきつい順にソート
+        t.sort()
+        for i in range(N):
+            if t[i] < i: # 制限時間がきつい順番に１秒ごとに打っていった場合に最後まで制限時間内に収まっているか
+                ok = False  # 時間切れ発生
+
+        if ok: # 最後まで時間ないに収まる場合はもっと低い高度（難しい条件）に挑戦する
+            right = mid
+        else: # 制限時間をオーバーした場合は高い高度に条件を緩くする
+            left = mid
+
+    print(right)
