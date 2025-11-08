@@ -1,4 +1,4 @@
-from unionFind import UnionFind
+from structures.unionFind import UnionFind
 
 
 def decayedBridge(N: int, edges: list[tuple[int, int]]):

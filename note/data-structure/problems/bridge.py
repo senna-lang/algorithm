@@ -12,9 +12,10 @@
 - 空間計算量: O(|V|)
 """
 
+import sys
+sys.path.append('../structures')
 from typing import List, Tuple
-
-from unionFind import UnionFind
+from structures.unionFind import UnionFind
 
 
 def count_bridges(n: int, edges: List[Tuple[int, int]]) -> int:

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from unionFind import UnionFind
+from structures.unionFind import UnionFind
 
 
 def countReachableCity(
