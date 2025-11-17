@@ -59,12 +59,14 @@ def quick_sort(a: list[int], left: int = None, right: int = None) -> None:
     i = left
 
     # jでループして、pivot未満のものがあったら左に詰めていく
+    # iを右にずらす＝pivot未満の要素を左に詰めて蓋をしていくイメージ
     for j in range(left, right - 1):
         if a[j] < pivot:
             a[i], a[j] = a[j], a[i]
             i += 1
 
     # pivotを適切な場所に挿入
+    # 蓋とpivotを交換
     a[i], a[right - 1] = a[right - 1], a[i]
 
     # 再帰的にソート
